@@ -1,19 +1,3 @@
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('ログアウト'), ['action' => 'logout']) ?></li>
-        <li>
-            <?= $this->Html->link(__('ユーザー追加'), ['action' => 'add']) ?>
-        </li>
-        <li>
-            <!-- お知らせを投稿する。UsersControllerに移動 -->
-            <?= $this->Html->link(__('お知らせ新規投稿'), ['controller' => 'Posts','action' => 'post']) ?>
-        </li>
-        <li>
-            <?= $this->Html->link(__('投稿管理'), ['controller' => 'Posts','action' => 'index']) ?>
-        </li>
-    </ul>
-</nav>
 <div class="users index large-9 medium-8 columns content">
     <h3><?= __('ユーザー管理画面') ?></h3>
     <table border="1" cellpadding="0" cellspacing="0">
@@ -28,6 +12,9 @@
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
+
+        <?= pr($user); ?>
+
         <tbody>
             <?php foreach ($users as $user): ?>
             <tr>

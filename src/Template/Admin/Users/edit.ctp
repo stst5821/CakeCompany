@@ -18,13 +18,20 @@
     </ul>
 </nav>
 <div class="users form large-9 medium-8 columns content">
+
+
+
+
     <?= $this->Form->create($user) ?>
     <fieldset>
         <legend><?= __('Edit User') ?></legend>
-        <?php
-            echo $this->Form->control('username');
-            echo $this->Form->control('password');
-        ?>
+        <?= $this->Form->control('username'); ?>
+        <?= $this->Form->control('password'); ?>
+        <?= $this->Form->control('role', [
+            'options' => 
+            ['admin' => '管理者', 'staff' => '一般'],
+            ['label' => '権限']
+        ]) ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>

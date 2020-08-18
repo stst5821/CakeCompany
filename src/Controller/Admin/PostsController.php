@@ -11,58 +11,54 @@ namespace App\Controller\Admin;
  */
 
 use CakeORMTableRegistry;
+use Cake\Event\Event; // 追加
 
 class PostsController extends AppController
 {
     public $paginate = [
-        'limit' => 6
+        'limit' => 6,
+        'order' => ['created' => 'desc'],
     ];
 
     public function initialize() {
         parent::initialize();
-        
+        $this->loadModel("Posts");
         $this->loadComponent('Paginator');
     }
 
     // 記事の一覧
-    
     public function index()
     {
         // ページネーションを追加する。
         $posts = $this->paginate($this->Posts);
-
         $this->set('posts', $posts);
-
     }
 
     // 記事の投稿
 
     public function post($id = null)
     {
-        // PostsTableを使うという宣言をする。
-        $this->loadModel("Posts");
         // Postsテーブルで、NewEntityを使い空の入れ物を作る。
         $post = $this->Posts->newEntity();
 
         // postがなかったら、中身を実行。
         if (!$this->request->is('post')) {
-        $this->set('post', $post);
-        return;
+            $this->set('post', $post);
+            return;
         }
         // patchEntityにgetDataで取得したデータを入れる。
         $post = $this->Posts->patchEntity($post, $this->request->getData());
 
         if ($post->getErrors()) {
-        $this->set('post', $post);
-        return;
+            $this->set('post', $post);
+            return;
         }
 
-        if ($this->Posts->save($post)) {
+        if (!$this->Posts->save($post)) {
+            $this->Flash->error(__('投稿できませんでした。'));
+        }
         $this->Flash->success(__('投稿しました！'));
-
-        return $this->redirect(['controller' => 'Posts','action' => 'index']);
-        }
-        $this->Flash->error(__('投稿できませんでした。'));
+        return $this->redirect(['action' => 'index']);
     }
 
     // viewメソッド
@@ -73,7 +69,15 @@ class PostsController extends AppController
         // get($id)の$idは、URLパラメータを見に行っているので変更はしなくてよい。
         // Postsテーブルの$idの中身に該当するレコードを探しにいっている。
         // Postsテーブルのpost_idと$idを比較して該当するレコードをgetしているが、post_idと比較するという命令はどこでしている？
-        $post = $this->Posts->get($id);
+        if (empty($id)) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
+        $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        if (empty($post)) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
 
         $this->set('post', $post);
     }
@@ -82,18 +86,30 @@ class PostsController extends AppController
 
     public function edit($id = null)
     {
-        $post = $this->Posts->get($id);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $post = $this->Posts->patchEntity($post, $this->request->getData());
-            if ($this->Posts->save($post)) {
-                $this->Flash->success(__('The user has been saved.'));
- 
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        
+        if (!$this->request->is(['patch', 'post', 'put'])) {
+            $this->set('post', $post);
+            return;
         }
-        $this->set('post', $post);
+        
+        $post = $this->Posts->patchEntity($post, $this->request->getData());
+
+        if ($post->getErrors()) {
+            $this->set('post', $post);
+            return;
+        }
+            
+        if ($this->Posts->save($post)) {
+            $this->Flash->success(__('The user has been saved.'));
+
+            return $this->redirect(['action' => 'index']);
+        }
+        
+        $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        
     }
+    
 
     // Delete メソッド
 
@@ -101,15 +117,22 @@ class PostsController extends AppController
     {
         // getとdeleteのリクエストのみ受付。postだとエラーを出す。
         $this->request->allowMethod(['post', 'delete']);
-        $post = $this->Posts->get($id);
-        
-        if ($this->Posts->delete($post)) {
-            $this->Flash->success(__('削除できました。.'));
-        } else {
+        if (empty($id)) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
+        $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        if (empty($post)) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
+
+        if (!$this->Posts->delete($post)) {
             $this->Flash->error(__('The user could not be deleted. Please, try again.'));
         }
+        $this->Flash->success(__('削除できました。.'));
     
         return $this->redirect(['action' => 'index']);
-    }
     
-}
+    }
+    }

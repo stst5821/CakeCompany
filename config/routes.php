@@ -67,24 +67,13 @@ Router::scope('/', function (RouteBuilder $routes) {
     $routes->fallbacks(DashedRoute::class);
     
 
-
-    // adminへのルーティング
-    
-    Router::prefix('admin', function (RouteBuilder $routes) {
-        $routes->connect(
-            '/', 
-            ['controller' => 'Users', 'action' => 'login']);
-        $routes->fallbacks(DashedRoute::class);
-    });
-
     // localhost/admin/posts/view のルーティング
     
     // ここにアクセスすると、admin/Postsコントローラのindexアクションに飛ぶようにする。
     // localhost/admin/posts/viewをURLに直接入力してアクセスすると、URLパラメータが付いていないためエラー画面になるのでindexに飛ばして
     // ユーザーがこのURLにアクセスできないようにする。
-
     Router::prefix('admin', function (RouteBuilder $routes) {
-        $routes->connect('/posts/view', ['controller' => 'Posts', 'action' => 'index']);
+        $routes->connect('/', ['controller' => 'Users', 'action' => 'login']);
         $routes->fallbacks(DashedRoute::class);
     });
 

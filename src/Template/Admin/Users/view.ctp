@@ -6,6 +6,11 @@
     </ul>
 </nav>
 <div class="users view large-9 medium-8 columns content">
+
+    <!-- クリックしたレコードのroleを見て判断してしまっている。
+    そうじゃなくて、ログインしているユーザーのroleを見なければいけない。 -->
+    <?php if(($user->role) == 'admin'): ?>
+
     <h3><?= h($user->id) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -29,4 +34,5 @@
             <td><?= h($user->modified) ?></td>
         </tr>
     </table>
+    <?php endif; ?>
 </div>

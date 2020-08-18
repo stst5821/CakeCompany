@@ -20,7 +20,6 @@ class PagesController extends AppController
 
     public function initialize() {
         parent::initialize();
-        
         $this->loadComponent('Paginator');
         // $this->loadHelper('Paginator', ['templates' => 'paginator-templates']);
     }
@@ -28,12 +27,13 @@ class PagesController extends AppController
     public function index()
     {
         // ページネーションを追加する。
-        $pages = $this->paginate($this->Pages);
+        $this->loadModel('Posts');
+        $pages = $this->paginate($this->Posts);
 
         // USERテーブルを全件検索して、$postsに代入。
         // $this->Pages->find('all')
         //          ↑ここは絶対にコントローラ名にしないといけない。この文は、Model/Table/pagesTableを見に行っている？
-        $this->set(compact('pages'));
+        $this->set('pages', $pages);
     }
     public function company()
     {

@@ -1,0 +1,18 @@
+/*ページネーション設定
+---------------------------------------------------------------------------*/
+
+#actions-sidebar {
+    display: flex;
+}
+
+li {
+    list-style: none;
+}
+
+.pagination {
+    display: flex;
+}
+
+.pagination li {
+    margin-right: 10px;
+}

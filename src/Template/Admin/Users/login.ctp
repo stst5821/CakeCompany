@@ -1,5 +1,4 @@
 <div class="users form large-9 medium-8 columns content">
-    <?= $this->Flash->render() ?>
     <?= $this->Form->create() ?>
     <fieldset>
         <legend><?= __('ユーザー名とパスワードを入力してください。') ?></legend>

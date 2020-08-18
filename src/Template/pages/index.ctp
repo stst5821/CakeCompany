@@ -28,7 +28,7 @@
                 <li><?= $this->Paginator->last(__('最後へ') . ' >>') ?></li>
             </ul>
             <p>
-                <?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?>
+                <?= $this->Paginator->counter(['format' => __(' {{page}} ページ目(全 {{pages}}ページ)')]) ?>
             </p>
         </div>
 

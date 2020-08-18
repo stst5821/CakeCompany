@@ -12,21 +12,19 @@ class PostsTable extends Table
     {
         parent::initialize($config);
  
-        $this->setTable('posts');
-        $this->setDisplayField('post_id');
-        $this->setPrimaryKey('post_id');
- 
-        $this->addBehavior('Timestamp');
     }
     public function validationDefault(Validator $validator)
     {
-        return $validator
-            ->notEmpty('body', 'A username is required');
+        return $validator->notEmpty('body', 'A username is required');
     }
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->isUnique(['post_id']));
- 
         return $rules;
+    }
+
+    // 自分で作成したオリジナル関数(最新$limit件の投稿データを取得できる便利な関数)
+    public function getRecentPost($limit)
+    {
+        return $this->find()->order(["created" => "desc"])->limit($limit)->all();
     }
 }

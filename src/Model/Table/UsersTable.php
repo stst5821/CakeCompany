@@ -11,21 +11,15 @@ class UsersTable extends Table
     public function initialize(array $config)
     {
         parent::initialize($config);
- 
-        $this->setTable('users');
-        $this->setDisplayField('id');
-        $this->setPrimaryKey('id');
- 
-        $this->addBehavior('Timestamp');
     }
     public function validationDefault(Validator $validator)
     {
         return $validator
-            ->notEmpty('username', 'A username is required')
-            ->notEmpty('password', 'A password is required')
+            ->notEmpty('username', 'ユーザー名は必須です。')
+            ->notEmpty('password', 'パスワードは必須です。')
             ->notEmpty('role', 'A role is required')
             ->add('role', 'inList', [
-                'rule' => ['inList', ['admin', 'author']],
+                'rule' => ['inList', ['admin', 'staff']],
                 'message' => 'Please enter a valid role'
             ]);
     }
