@@ -18,6 +18,7 @@ class PostsController extends AppController
     public $paginate = [
         'limit' => 6,
         'order' => ['created' => 'desc'],
+        'contain' => ['Users'] // Usersテーブルを結合する
     ];
 
     public function initialize() {
@@ -35,8 +36,6 @@ class PostsController extends AppController
     {
         // ページネーションを追加する。
         $posts = $this->paginate($this->Posts);
-        $this->set('posts', $posts);
-
         $this->set('posts', $posts);
     }
 

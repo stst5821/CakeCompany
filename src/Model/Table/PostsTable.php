@@ -11,6 +11,9 @@ class PostsTable extends AppTable
     public function initialize(array $config)
     {
         parent::initialize($config);
+
+        // Usersテーブルを結合する
+        $this->belongsTo('Users');
  
     }
     public function validationDefault(Validator $validator)

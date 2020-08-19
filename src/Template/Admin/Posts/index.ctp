@@ -8,6 +8,7 @@
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('body') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('userid') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('username') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -19,11 +20,12 @@
         <tbody>
 
             <?php foreach ($posts as $post): ?>
-
             <tr>
                 <td><?= $this->Number->format(h($post->id)) ?></td>
                 <td><?= h($post->body) ?></td>
                 <td><?= h($post->user_id) ?></td>
+                <!-- postテーブルにusersテーブルをbelongして結合している。 -->
+                <td><?= h($post->user->username) ?></td>
                 <td><?= h($post->created) ?></td>
                 <td><?= h($post->modified) ?></td>
                 <td class="actions">
