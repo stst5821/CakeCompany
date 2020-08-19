@@ -19,6 +19,11 @@
 require __DIR__ . '/paths.php';
 
 /*
+ * グローバル定数
+ */
+require __DIR__ . '/defines.php';
+
+/*
  * Bootstrap CakePHP.
  *
  * Does the various bits of setup that CakePHP needs to do.

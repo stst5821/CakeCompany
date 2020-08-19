@@ -4,35 +4,16 @@
  * @var \Cake\Datasource\EntityInterface $user
  */
 ?>
-
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Form->postLink(
-                __('Delete'),
-                ['action' => 'delete', $user->id],
-                ['confirm' => __('Are you sure you want to delete # {0}?', $user->id)]
-            )
-        ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
-    </ul>
-</nav>
-<div class="users form large-9 medium-8 columns content">
-
-
-
-
-    <?= $this->Form->create($user) ?>
-    <fieldset>
-        <legend><?= __('Edit User') ?></legend>
-        <?= $this->Form->control('username'); ?>
-        <?= $this->Form->control('password'); ?>
-        <?= $this->Form->control('role', [
-            'options' => 
-            ['admin' => '管理者', 'staff' => '一般'],
-            ['label' => '権限']
+<?= $this->Form->create($user) ?>
+<fieldset>
+    <legend><?= __('Edit User') ?></legend>
+    <?= $this->Form->control('username', ['label' => 'ログインID　']); ?>
+    <?= $this->Form->control('password', ['label' => 'パスワード　']); ?>
+    <?= $this->Form->control('role', [
+            'options' => $user->roleLabels,
+            'label' => '権限　',
         ]) ?>
-    </fieldset>
-    <?= $this->Form->button(__('Submit')) ?>
-    <?= $this->Form->end() ?>
+</fieldset>
+<?= $this->Form->button(__('Submit')) ?>
+<?= $this->Form->end() ?>
 </div>

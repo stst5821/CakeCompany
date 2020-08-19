@@ -40,6 +40,12 @@ class AppController extends Controller
     public function initialize()
     {
         parent::initialize();
+
+        // 現在ログインしている人のレコードを取り出して、user変数にsetし、viewで使えるようにしている。
+        // ログインしたときの情報をloginアクションのところで、$this->Auth->setUser($user);を使って事前に保管している。
+        
+        
+        $this->loadModel("Users");
  
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
@@ -67,6 +73,24 @@ class AppController extends Controller
                 ]
             ],
         ]); 
+        
+        //ログインしている場合
+        if (!empty($this->Auth->user())) {
+            //ログインフラグをtrueにする
+            define("IS_LOGIN", true);
+            //管理者全権限をもってたら管理者フラグをtrueにする
+            // 今ログインしているAuth->userのidで、Usersテーブル内を検索してヒットしたデータを$userに格納して
+            $user = $this->Users->find()->where(["id" => $this->Auth->user('id')])->first();
+            // $userのroleと、USERS__ROLE__SUDOを比較して、同じかどうかチェックする。
+            define("IS_SUDO", $user->role == USERS__ROLE__SUDO);
+            
+        //ログインしていない場合
+        } else {
+            //ログインフラグfalse
+            define("IS_LOGIN", false);
+            //管理者フラグfalse
+            define("IS_SUDO", false);
+        }
  
         /*
          * Enable the following component for recommended CakePHP security settings.

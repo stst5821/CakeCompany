@@ -6,7 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
  
-class UsersTable extends Table
+class UsersTable extends AppTable
 {
     public function initialize(array $config)
     {
@@ -17,11 +17,7 @@ class UsersTable extends Table
         return $validator
             ->notEmpty('username', 'ユーザー名は必須です。')
             ->notEmpty('password', 'パスワードは必須です。')
-            ->notEmpty('role', 'A role is required')
-            ->add('role', 'inList', [
-                'rule' => ['inList', ['admin', 'staff']],
-                'message' => 'Please enter a valid role'
-            ]);
+            ->notEmpty('role', 'A role is required');
     }
     public function buildRules(RulesChecker $rules)
     {

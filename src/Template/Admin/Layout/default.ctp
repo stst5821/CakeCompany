@@ -43,7 +43,12 @@ $cakeDescription = 'Sample Company';
 </head>
 
 
+<!-- 現在ログイン中のusernameを表示している。PostsとUsersコントローラのinitializeに書いている。 -->
+<?= $login_user ?>さん、ログイン中
+
+
 <nav class="large-3 medium-4 columns" id="actions-sidebar">
+
     <ul class="side-nav">
         <li>
             <?= $this->Html->link(__('ログアウト'), ['controller' => 'Users','action' => 'logout']) ?>
@@ -54,10 +59,19 @@ $cakeDescription = 'Sample Company';
 
     <ul class="side-nav">
         <li>
+            <!-- ユーザー一覧や追加の文字は、空白にして見えなくしても良いが、勉強中になので、わかりやすいように文字として残しておく。 -->
+            <?php if (!IS_SUDO): ?>
+            ユーザー一覧
+            <?php else: ?>
             <?= $this->Html->link(__('ユーザー一覧'), ['controller' => 'Users','action' => 'index']) ?>
+            <?php endif ?>
         </li>
         <li>
+            <?php if (!IS_SUDO): ?>
+            ユーザー追加
+            <?php else: ?>
             <?= $this->Html->link(__('ユーザー追加'), ['controller' => 'Users','action' => 'add']) ?>
+            <?php endif ?>
         </li>
     </ul>
 

@@ -6,7 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
  
-class PostsTable extends Table
+class PostsTable extends AppTable
 {
     public function initialize(array $config)
     {

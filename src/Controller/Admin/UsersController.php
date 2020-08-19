@@ -22,10 +22,12 @@ class UsersController extends AppController
     public function initialize()
     {
         parent::initialize();
-        // 認証しなくても表示できるページを指定する。
 
         // ページネーションのコンポーネントをロード
         $this->loadComponent('Paginator');
+
+        // default.ctpに現在ログインしているユーザー名を表示するため、ログイン中ユーザーのusernameをセットしている。
+        $this->set('login_user', $this->Auth->user('username'));
     }
 
     // indexメソッド
@@ -34,13 +36,13 @@ class UsersController extends AppController
     
     public function index()
     {
+        // 管理者でない場合は、indexにリダイレクトさせる。
+        if (!IS_SUDO) {
+            return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
+        }
         $users = $this->paginate($this->Users);
 
         $this->set('users', $users);
-
-        // 現在ログインしている人のレコードを取り出して、user変数にsetし、viewで使えるようにしている。
-        // ログインしたときの情報をloginアクションのところで、$this->Auth->setUser($user);を使って事前に保管している。
-        $this->set('user', $this->Auth->user('id'));
         
     }
     
@@ -64,6 +66,11 @@ class UsersController extends AppController
 
     public function add()
     {
+        // 管理者でない場合は、indexにリダイレクトさせる。
+        if (!IS_SUDO) {
+            return $this->redirect(['action' => 'index']);
+        }
+
         $user = $this->Users->newEntity();
 
         if ($this->request->is('post')) {
@@ -91,6 +98,9 @@ class UsersController extends AppController
 
     public function edit($id = null)
     {
+        if (!IS_SUDO) {
+            return $this->redirect(['action' => 'index']);
+        }
         $this->set('user', $this->Auth->user('id'));
 
         
@@ -120,6 +130,9 @@ class UsersController extends AppController
 
     public function delete($id = null)
     {
+        if (!IS_SUDO) {
+            return $this->redirect(['action' => 'index']);
+        }
         // 許可するデータ受け取り方法を決める。
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);

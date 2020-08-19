@@ -13,15 +13,13 @@
             </tr>
         </thead>
 
-        <?= pr($user); ?>
-
         <tbody>
             <?php foreach ($users as $user): ?>
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
                 <td><?= h($user->username) ?></td>
                 <td><?= h($user->password) ?></td>
-                <td><?= h($user->role) ?></td>
+                <td><?= h($user->roleLabel) ?></td>
                 <td><?= h($user->created) ?></td>
                 <td><?= h($user->modified) ?></td>
                 <td class="actions">

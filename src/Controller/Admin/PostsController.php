@@ -24,6 +24,10 @@ class PostsController extends AppController
         parent::initialize();
         $this->loadModel("Posts");
         $this->loadComponent('Paginator');
+        
+        // default.ctpに現在ログインしているユーザー名を表示するため、ログイン中ユーザーのusernameをセットしている。
+        $this->set('login_user', $this->Auth->user('username'));
+        $this->set('login_user_id', $this->Auth->user('id'));
     }
 
     // 記事の一覧
@@ -31,6 +35,8 @@ class PostsController extends AppController
     {
         // ページネーションを追加する。
         $posts = $this->paginate($this->Posts);
+        $this->set('posts', $posts);
+
         $this->set('posts', $posts);
     }
 
@@ -46,6 +52,7 @@ class PostsController extends AppController
             $this->set('post', $post);
             return;
         }
+
         // patchEntityにgetDataで取得したデータを入れる。
         $post = $this->Posts->patchEntity($post, $this->request->getData());
 
@@ -57,6 +64,7 @@ class PostsController extends AppController
         if (!$this->Posts->save($post)) {
             $this->Flash->error(__('投稿できませんでした。'));
         }
+        
         $this->Flash->success(__('投稿しました！'));
         return $this->redirect(['action' => 'index']);
     }
@@ -86,6 +94,11 @@ class PostsController extends AppController
 
     public function edit($id = null)
     {
+        // 管理者でなければ、indexにリダイレクトさせる。
+        if (!IS_SUDO) {
+            return $this->redirect(['action' => 'index']);
+        }
+
         $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
         
         if (!$this->request->is(['patch', 'post', 'put'])) {
@@ -115,6 +128,11 @@ class PostsController extends AppController
 
     public function delete($id = null)
     {
+        // 管理者でなければ、indexにリダイレクトさせる。
+        if (!IS_SUDO) {
+            return $this->redirect(['action' => 'index']);
+        }
+        
         // getとdeleteのリクエストのみ受付。postだとエラーを出す。
         $this->request->allowMethod(['post', 'delete']);
         if (empty($id)) {

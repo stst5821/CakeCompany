@@ -12,7 +12,9 @@
                 'class' => 'posts_body'
                 ]);
         ?>
+
     </fieldset>
+    <?= $this->Form->hidden( 'user_id' ,['value'=> $login_user_id ]) ; ?>
     <?= $this->Form->button(__('投稿する！')) ?>
     <?= $this->Form->end() ?>
     </div>

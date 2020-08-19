@@ -7,6 +7,7 @@
             <tr>
                 <th scope="col"><?= $this->Paginator->sort('id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('body') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('userid') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('created') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col" class="actions"><?= __('Actions') ?></th>
@@ -22,17 +23,28 @@
             <tr>
                 <td><?= $this->Number->format(h($post->id)) ?></td>
                 <td><?= h($post->body) ?></td>
+                <td><?= h($post->user_id) ?></td>
                 <td><?= h($post->created) ?></td>
                 <td><?= h($post->modified) ?></td>
                 <td class="actions">
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->
                     <?= $this->Html->link(__('詳細'), ['action' => 'view', $post->id]) ?>
+
+                    <!-- adminでログインしていれば修正可能にし、staffでログインしている場合は、修正不可にする。 -->
+                    <?php if (!IS_SUDO): ?>
+                    修正
+                    <?php else: ?>
                     <?= $this->Html->link(__('修正'), ['action' => 'edit', $post->id]) ?>
+                    <?php endif ?>
 
-                    <!-- 削除前の確認ダイアログを追加。 -->
+                    <!-- adminでログインしていれば削除可能にし、staffでログインしている場合は、削除不可にする。 -->
+                    <?php if (!IS_SUDO): ?>
+                    削除
+                    <?php else: ?>
                     <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $post->id], 
+                    // 削除前の確認ダイアログを追加
                         ['confirm' => __('# {0} の投稿を削除してよろしいですか？ ', $post->id)]) ?>
-
+                    <?php endif ?>
                 </td>
             </tr>
             <?php endforeach; ?>
