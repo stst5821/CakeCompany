@@ -18,15 +18,23 @@
             <tr>
                 <td><?= $this->Number->format($user->id) ?></td>
                 <td><?= h($user->username) ?></td>
-                <td><?= h($user->password) ?></td>
+                <td>******</td>
                 <td><?= h($user->roleLabel) ?></td>
                 <td><?= h($user->created) ?></td>
                 <td><?= h($user->modified) ?></td>
                 <td class="actions">
                     <?= $this->Html->link(__('詳細'), ['action' => 'view', $user->id]) ?>
                     <?= $this->Html->link(__('修正'), ['action' => 'edit', $user->id]) ?>
+
+                    <!-- 管理者が1人しかいない場合、User->roleが1(admin)のレコードを削除不可とする。 -->
+                    <?php if($count == 1 && $user->role == 1): ?>
+                    削除
+                    <?php else: ?>
                     <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $user->id], 
-                        ['confirm' => __('# {0} の投稿を削除してよろしいですか？ ', $user->id)]) ?>
+                        ['confirm' => __('# {0} を削除してよろしいですか？ ', $user->id)]) ?>
+                    <?php endif; ?>
+
+
                 </td>
             </tr>
             <?php endforeach; ?>

@@ -40,9 +40,13 @@ class UsersController extends AppController
         if (!IS_SUDO) {
             return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
         }
+        
         $users = $this->paginate($this->Users);
-
         $this->set('users', $users);
+
+        // Usersテーブルのadminの数をカウント。
+        $count = $this->Users->find()->where(['role' => 1])->count();
+        $this->set('count', $count);
         
     }
     
@@ -98,17 +102,26 @@ class UsersController extends AppController
 
     public function edit($id = null)
     {
-        if (!IS_SUDO) {
+        if (!IS_SUDO) 
+        {
             return $this->redirect(['action' => 'index']);
         }
         $this->set('user', $this->Auth->user('id'));
 
+        // editするため選択したレコードがadminだったら実行する。
+        $user = $this->Users->get($id);
+        $this->set('user', $user);
+
+        // Usersテーブルのadminの数をカウント。
+        $count = $this->Users->find()->where(['role' => 1])->count();
+        $this->set('count', $count);
         
         $user = $this->Users->get($id, [
             'contain' => []
         ]);
 
-        if ($this->request->is(['patch', 'post', 'put'])) {
+        if ($this->request->is(['patch', 'post', 'put']))
+        {
             $user = $this->Users->patchEntity($user, $this->request->getData());
 
             if ($this->Users->save($user)) {
@@ -133,6 +146,7 @@ class UsersController extends AppController
         if (!IS_SUDO) {
             return $this->redirect(['action' => 'index']);
         }
+
         // 許可するデータ受け取り方法を決める。
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
