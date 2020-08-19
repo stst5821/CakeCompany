@@ -5,9 +5,8 @@
         <?= $this->Form->control('username', ['label' => 'ユーザー名']) ?>
         <?= $this->Form->control('password', ['label' => 'パスワード']) ?>
         <?= $this->Form->control('role', [
-            'options' => 
-            ['admin' => '管理者', 'staff' => '一般'],
-            ['label' => '権限']
+            'options' => $user->roleLabels,
+            'label' => '権限　',
         ]) ?>
         <?= $this->Form->button(__('Submit')) ?>
     </fieldset>
