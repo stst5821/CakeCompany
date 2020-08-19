@@ -32,20 +32,20 @@
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->
                     <?= $this->Html->link(__('詳細'), ['action' => 'view', $post->id]) ?>
 
-                    <!-- adminでログインしていれば修正可能にし、staffでログインしている場合は、修正不可にする。 -->
-                    <?php if (!IS_SUDO): ?>
-                    修正
-                    <?php else: ?>
+                    <!-- 管理者の場合、またはスタッフの場合でログイン中のスタッフが投稿した記事のみ修正可能 -->
+                    <?php if(IS_SUDO || $post->user_id == $login_user_id): ?>
                     <?= $this->Html->link(__('修正'), ['action' => 'edit', $post->id]) ?>
+                    <?php else: ?>
+                    修正
                     <?php endif ?>
 
                     <!-- adminでログインしていれば削除可能にし、staffでログインしている場合は、削除不可にする。 -->
-                    <?php if (!IS_SUDO): ?>
-                    削除
-                    <?php else: ?>
+                    <?php if(IS_SUDO || $post->user_id == $login_user_id): ?>
                     <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $post->id], 
                     // 削除前の確認ダイアログを追加
                         ['confirm' => __('# {0} の投稿を削除してよろしいですか？ ', $post->id)]) ?>
+                    <?php else: ?>
+                    削除
                     <?php endif ?>
                 </td>
             </tr>

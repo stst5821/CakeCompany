@@ -93,10 +93,10 @@ class PostsController extends AppController
 
     public function edit($id = null)
     {
-        // 管理者でなければ、indexにリダイレクトさせる。
-        if (!IS_SUDO) {
-            return $this->redirect(['action' => 'index']);
-        }
+        //  管理者か、スタッフ自身が作った記事でなければ、indexにリダイレクトさせる。
+        // if (!$this->Posts->get($id) == $this->Auth->user('id')) {
+        //     return $this->redirect(['action' => 'index']);
+        // }
 
         $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
         
@@ -127,10 +127,10 @@ class PostsController extends AppController
 
     public function delete($id = null)
     {
-        // 管理者でなければ、indexにリダイレクトさせる。
-        if (!IS_SUDO) {
-            return $this->redirect(['action' => 'index']);
-        }
+        //  スタッフログイン時、スタッフのidと投稿のpost_idを照合し、スタッフ自身が作った記事でなければ、indexにリダイレクトさせる。
+        // if (!$this->Posts->get($id) == $this->Auth->user('id')) {
+        //     return $this->redirect(['action' => 'index']);
+        // }
         
         // getとdeleteのリクエストのみ受付。postだとエラーを出す。
         $this->request->allowMethod(['post', 'delete']);
