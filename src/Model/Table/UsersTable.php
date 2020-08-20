@@ -12,6 +12,7 @@ class UsersTable extends AppTable
     {
         parent::initialize($config);
     }
+    
     public function validationDefault(Validator $validator)
     {
         $validator->notEmpty('username', 'ユーザー名は必須です。');
@@ -25,6 +26,7 @@ class UsersTable extends AppTable
         ]);
         return $validator;
     }
+    
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['username']));

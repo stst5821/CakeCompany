@@ -52,16 +52,19 @@ $cakeDescription = 'Sample Company';
                 <ul>
                     <li>
                         <a href="<?= $this->Url->build(['controller'=>'pages', 'action'=>'company']); ?>"
-                            class="something">COMPANY</a>
+                            class="something">会社概要</a>
                     </li>
                     <li><a href="<?= $this->Url->build(['controller'=>'pages', 'action'=>'service']); ?>"
-                            class="something">SERVICE</a>
+                            class="something">サービス一覧</a>
                     </li>
                     <li><a href="<?= $this->Url->build(['controller'=>'pages', 'action'=>'recruit']); ?>"
-                            class="something">RECRUIT</a>
+                            class="something">求人</a>
+                    </li>
+                    <li><a href="<?= $this->Url->build(['controller'=>'pages', 'action'=>'contact']); ?>"
+                            class="something">お問い合わせ</a>
                     </li>
                     <li><a href="<?= $this->Url->build(['controller'=>'pages', 'action'=>'link']); ?>"
-                            class="something">LINK</a>
+                            class="something">リンク</a>
                     </li>
                 </ul>
             </nav>

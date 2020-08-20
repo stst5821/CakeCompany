@@ -120,6 +120,9 @@ class UsersController extends AppController
             'contain' => []
         ]);
 
+        // ユーザーがedit.ctpで項目を入力してsubmitすると、
+        // そのデータがまたこのコントローラに送られてきて、このif文でチェックされる。
+
         if ($this->request->is(['patch', 'post', 'put']))
         {
             $user = $this->Users->patchEntity($user, $this->request->getData());
