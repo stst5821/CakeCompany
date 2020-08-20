@@ -27,8 +27,7 @@ class PostsController extends AppController
         $this->loadComponent('Paginator');
         
         // default.ctpに現在ログインしているユーザー名を表示するため、ログイン中ユーザーのusernameをセットしている。
-        $this->set('login_user', $this->Auth->user('username'));
-        $this->set('login_user_id', $this->Auth->user('id'));
+       
     }
 
     // 記事の一覧
@@ -80,7 +79,9 @@ class PostsController extends AppController
             $this->redirect(['action' => 'index']);
             return;
         }
-        $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        $post = $this->Posts->find()->where([
+            "Posts.id" => $id,
+        ])->first();
         if (empty($post)) {
             $this->redirect(['action' => 'index']);
             return;
@@ -97,8 +98,18 @@ class PostsController extends AppController
         // if (!$this->Posts->get($id) == $this->Auth->user('id')) {
         //     return $this->redirect(['action' => 'index']);
         // }
-
-        $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        
+        $query = $this->Posts->find()->where(["Posts.id" => $id]);
+        //管理者じゃない場合は自分の投稿データのみ修正できるため条件を追加
+        if (!IS_SUDO) {
+            $query->where(["Posts.user_id" => $this->Auth->user('id')]);
+        }
+        $post = $query->first();
+        
+        if (empty($post)) {
+            $this->redirect(['action' => 'index']);
+            return;
+        }
         
         if (!$this->request->is(['patch', 'post', 'put'])) {
             $this->set('post', $post);

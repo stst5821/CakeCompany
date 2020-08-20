@@ -27,7 +27,7 @@ class UsersController extends AppController
         $this->loadComponent('Paginator');
 
         // default.ctpに現在ログインしているユーザー名を表示するため、ログイン中ユーザーのusernameをセットしている。
-        $this->set('login_user', $this->Auth->user('username'));
+        // $this->set('login_user', $this->Auth->user('username'));
     }
 
     // indexメソッド
@@ -45,7 +45,7 @@ class UsersController extends AppController
         $this->set('users', $users);
 
         // Usersテーブルのadminの数をカウント。
-        $count = $this->Users->find()->where(['role' => 1])->count();
+        $count = $this->Users->find()->where(['role' => USERS__ROLE__SUDO])->count();
         $this->set('count', $count);
         
     }

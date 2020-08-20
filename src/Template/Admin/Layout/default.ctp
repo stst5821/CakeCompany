@@ -93,6 +93,7 @@ $cakeDescription = 'Sample Company';
 
 
 <!-- ここにViewの内容が表示される。 -->
+<?= $this->Flash->render('flash') ?>
 <?= $this->fetch('content') ?>
 
 

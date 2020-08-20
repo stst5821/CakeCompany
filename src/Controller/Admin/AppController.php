@@ -50,8 +50,10 @@ class AppController extends Controller
         $this->loadComponent('RequestHandler', [
             'enableBeforeRedirect' => false,
         ]);
+        
         $this->loadComponent('Flash');
  
+        // 認証のコンポーネント
         $this->loadComponent('Auth', [
             'loginRedirect' => [
                 'controller' => 'Users',
@@ -83,6 +85,9 @@ class AppController extends Controller
             $user = $this->Users->find()->where(["id" => $this->Auth->user('id')])->first();
             // $userのroleと、USERS__ROLE__SUDOを比較して、同じかどうかチェックする。
             define("IS_SUDO", $user->role == USERS__ROLE__SUDO);
+
+            $this->set('login_user', $this->Auth->user('username'));
+            $this->set('login_user_id', $this->Auth->user('id'));
             
         //ログインしていない場合
         } else {

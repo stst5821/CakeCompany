@@ -34,7 +34,6 @@
                         ['confirm' => __('# {0} を削除してよろしいですか？ ', $user->id)]) ?>
                     <?php endif; ?>
 
-
                 </td>
             </tr>
             <?php endforeach; ?>
