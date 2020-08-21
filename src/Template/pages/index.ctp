@@ -4,12 +4,10 @@
     <img src="img/2.jpg" alt="" id="slide2">
     <img src="img/3.jpg" alt="" id="slide3">
 </aside>
-
 <div id="contents">
 
     <section id="new">
         <h2 id="newinfo_hdr" class="close">更新情報・お知らせ</h2>
-
         <dl id="newinfo">
             <?php foreach ($pages as $page): ?>
             <!-- createdには投稿時間も含まれているが、日付だけ表示したいので、

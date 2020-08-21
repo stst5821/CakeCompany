@@ -32,9 +32,15 @@ class ContactsController extends AppController
     // 記事の一覧
     public function index()
     {
+
+        // 管理者でない場合は、indexにリダイレクトさせる。
+        if (!IS_SUDO) {
+            return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
+        }
+                
         // ページネーションを追加する。
-        $posts = $this->paginate($this->Posts);
-        $this->set('posts', $posts);
+        $contacts = $this->paginate($this->Contacts);
+        $this->set('contacts', $contacts);
     }
 
 }

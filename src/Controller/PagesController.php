@@ -64,11 +64,15 @@ class PagesController extends AppController
             if ($this->Contacts->save($contact)) {
                 $this->Flash->success(__('ユーザーを登録しました。'));
  
-                return $this->redirect(['action' => 'index']);
+                return $this->redirect(['action' => 'finish']);
             }
             $this->Flash->error(__('登録できませんでした。'));
         }
         $this->set('user', $contact);
+    }
+
+    public function finish()
+    {
     }
 
     public function link()

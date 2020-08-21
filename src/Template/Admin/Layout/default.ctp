@@ -75,9 +75,6 @@ $cakeDescription = 'Sample Company';
         </li>
     </ul>
 
-
-
-
     <ul class="side-nav">
         <li>
             <!-- お知らせを投稿する。UsersControllerに移動 -->
@@ -88,6 +85,14 @@ $cakeDescription = 'Sample Company';
             <?= $this->Html->link(__('お知らせ投稿'), ['controller' => 'Posts','action' => 'post']) ?>
         </li>
     </ul>
+
+    <ul class="side-nav">
+        <li>
+            <!-- お知らせを投稿する。UsersControllerに移動 -->
+            <?= $this->Html->link(__('お問い合わせ一覧'), ['controller' => 'Contacts','action' => 'index']) ?>
+        </li>
+    </ul>
+
 </nav>
 
 
