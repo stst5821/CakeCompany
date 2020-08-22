@@ -13,5 +13,4 @@ class Pages extends Entity
     protected $_hidden = [
         'post_id'
     ];
-
 }

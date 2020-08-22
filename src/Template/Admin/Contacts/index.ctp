@@ -18,11 +18,10 @@
         </thead>
 
         <!-- 投稿一覧 -->
-
         <tbody>
 
             <?php foreach ($contacts as $contact): ?>
-            <tr>
+            <tr class="<?= h($contact->flagLabel) ?>">
                 <td><?= $this->Number->format(h($contact->id)) ?></td>
                 <td><?= h($contact->customer_name) ?></td>
                 <td><?= h($contact->mail) ?></td>
@@ -30,11 +29,11 @@
                 <td><?= h($contact->received) ?></td>
                 <td><?= h($contact->modified) ?></td>
                 <td><?= h($contact->user_id) ?></td>
-                <td><?= h($contact->flag) ?></td>
+                <td><?= h($contact->flagLabel) ?></td>
                 <td class="actions">
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->
                     <?= $this->Html->link(__('詳細'), ['action' => 'view', $contact->id]) ?>
-                    <?= $this->Html->link(__('修正'), ['action' => 'edit', $contact->id]) ?>
+                    <!-- <?= $this->Html->link(__('修正'), ['action' => 'edit', $contact->id]) ?> -->
                     <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $contact->id], 
                     // 削除前の確認ダイアログを追加
                         ['confirm' => __('# {0} の投稿を削除してよろしいですか？ ', $contact->id)]) ?>

@@ -11,6 +11,8 @@ namespace App\Controller;
  */
 
 use CakeORMTableRegistry;
+use Cake\Mailer\Email; // Emailクラスをロードする。
+
 
 class PagesController extends AppController
 {
@@ -40,12 +42,20 @@ class PagesController extends AppController
     public function company()
     {
     }
+
     public function service()
     {
     }
+
     public function recruit()
     {
     }
+
+
+    // お問い合わせ
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    
     public function contact()
     {
         $this->loadModel('Contacts');
@@ -64,12 +74,22 @@ class PagesController extends AppController
             if ($this->Contacts->save($contact)) {
                 $this->Flash->success(__('ユーザーを登録しました。'));
  
+                $email = new Email();
+                $email->setProfile('ToSelf');
+
+                $email->setFrom(['stst5821@gmail.com' => 'SampleCompany'])
+                ->setTo('stst5821@gmail.com')
+                ->setSubject('お問い合わせがありました。')
+                ->send('本文');
+                
                 return $this->redirect(['action' => 'finish']);
+
             }
             $this->Flash->error(__('登録できませんでした。'));
         }
         $this->set('user', $contact);
     }
+
 
     public function finish()
     {

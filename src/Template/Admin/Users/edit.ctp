@@ -1,9 +1,3 @@
-<?php
-/**
- * @var \App\View\AppView $this
- * @var \Cake\Datasource\EntityInterface $user
- */
-?>
 <?= $this->Form->create($user) ?>
 <fieldset>
     <legend><?= __('Edit User') ?></legend>

@@ -16,3 +16,7 @@ li {
 .pagination li {
     margin-right: 10px;
 }
+
+.Done {
+    background-color: #dcdcdc;
+}

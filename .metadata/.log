@@ -1,0 +1,15 @@
+!SESSION 2020-08-22 10:40:54.603 -----------------------------------------------
+eclipse.buildId=4.16.0.I20200604-0540
+java.version=11.0.7
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=ja_JP
+Framework arguments:  -product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product
+
+!ENTRY org.eclipse.mylyn.tasks.core 4 0 2020-08-22 10:41:03.294
+!MESSAGE Unexpected error while loading repository template extensions
+!SUBENTRY 1 org.eclipse.mylyn.tasks.core 4 0 2020-08-22 10:41:03.294
+!MESSAGE Could not load repository template extension contributed by 'org.eclipse.mylyn.bugzilla.ide' with connectorKind 'bugzilla'
+
+!ENTRY org.eclipse.rse.core 1 0 2020-08-22 10:44:56.442
+!MESSAGE 保存されたパスワードはセキュア・ストレージへの移行に使用できません。非推奨の認証クラス (org.eclipse.core.runtime.compatibility.auth) がインストールされていません。
