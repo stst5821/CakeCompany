@@ -20,6 +20,7 @@
         <tbody>
 
             <?php foreach ($posts as $post): ?>
+
             <tr>
                 <td><?= $this->Number->format(h($post->id)) ?></td>
                 <td><?= h($post->body) ?></td>

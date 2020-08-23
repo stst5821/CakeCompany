@@ -17,14 +17,13 @@ class ContactsController extends AppController
 {
     public $paginate = [
         'limit' => 6,
-        'order' => ['received' => 'desc']
+        'order' => ['received' => 'desc'],
+        'contain' => ['Users']
     ];
 
     public function initialize() {
         
         parent::initialize();
-        
-        // $this->loadModel("Contacts");
         $this->loadComponent('Paginator');
     }
 
@@ -55,16 +54,14 @@ class ContactsController extends AppController
     public function view($id = null)
     {
 
-        $record_color = 'red';
-        $this->set('contact', $record_color);
-
         // 管理者でない場合は、indexにリダイレクトさせる。
         if (!IS_SUDO) {
             return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
         }
         // contactsテーブルから$idを元に該当するデータを引っ張ってくる
+        // containオプションで、Usersテーブルと結合する。
         $contact = $this->Contacts->get($id,[
-            'contain' => []
+            'contain' => ['Users']
         ]);
         // ↑の$userをuser変数に入れてセットして、Viewで使えるようにする。
         $this->set('contact', $contact);
@@ -75,9 +72,17 @@ class ContactsController extends AppController
         {
             $contact = $this->Contacts->patchEntity($contact, $this->request->getData());
 
+            // flagが「NOTYET」だったら、modifiedとidを更新しない。
+            // 理由：doneにした時だけ、対応者IDと氏名を入れたい。doneにした日時をmodifiedに登録したい。
+            if($contact['flag'] == CONTENTS__FLAG__NOT_YET)
+            {
+                $contact->setDirty('modified', true);
+                $contact['id'] = '';
+            }
+            
+
             if ($this->Contacts->save($contact)) {
                 $this->Flash->success(__('The contact has been saved.'));
- 
                 return $this->redirect(['action' => 'index']);
             }
 

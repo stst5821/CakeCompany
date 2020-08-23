@@ -87,6 +87,7 @@ class AppController extends Controller
             define("IS_SUDO", $user->role == USERS__ROLE__SUDO);
 
             $this->set('login_user', $this->Auth->user('username'));
+            // ログインしている人のIDを、$login_user_idに代入してViewで使えるようにしている。
             $this->set('login_user_id', $this->Auth->user('id'));
             
         //ログインしていない場合

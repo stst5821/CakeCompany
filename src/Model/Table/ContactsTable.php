@@ -13,7 +13,7 @@ class ContactsTable extends AppTable
         parent::initialize($config);
 
         // Usersテーブルを結合する
-        // $this->belongsTo('Users');
+        $this->belongsTo('Users');
  
     }
     

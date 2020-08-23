@@ -33,6 +33,14 @@
             <td><?= h($contact->user_id) ?></td>
         </tr>
         <tr>
+            <th scope="row"><?= __('対応者氏名') ?></th>
+            <?php if(isset($contact->user_id)): ?>
+            <td><?= h($contact->user->username) ?></td>
+            <?php else: ?>
+            <td></td>
+            <?php endif; ?>
+        </tr>
+        <tr>
             <th scope="row"><?= __('対応ステータス') ?></th>
             <td>
                 <?= $this->Form->control('flag', [
@@ -40,9 +48,12 @@
                 'label' => '',
                 ]) ?>
             </td>
-
         </tr>
     </table>
+    <!-- ログインしているユーザーのidをuser_idに入れる。 -->
+
+    <?= $this->Form->hidden( 'user_id' ,['value'=> $login_user_id ]) ; ?>
+
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
 </div>

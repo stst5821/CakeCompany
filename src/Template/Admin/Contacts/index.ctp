@@ -21,14 +21,31 @@
         <tbody>
 
             <?php foreach ($contacts as $contact): ?>
+
+
             <tr class="<?= h($contact->flagLabel) ?>">
-                <td><?= $this->Number->format(h($contact->id)) ?></td>
+                <td><?= h($contact->id) ?></td>
                 <td><?= h($contact->customer_name) ?></td>
                 <td><?= h($contact->mail) ?></td>
                 <td><?= h($contact->body) ?></td>
                 <td><?= h($contact->received) ?></td>
                 <td><?= h($contact->modified) ?></td>
-                <td><?= h($contact->user_id) ?></td>
+
+                <!-- issetで、usernameがあれば表示、なければ何も表示しない。 -->
+                <?php if(isset($contact->user->username)) : ?>
+
+                <!-- flagをdoneに変更したスタッフ名をuserカラムに入れる。 -->
+                <!-- flagがdoneなら、userカラムにusernameを表示させる。それ以外なら何も表示しない。-->
+                <?php if($contact->flag == CONTENTS__FLAG__DONE) : ?>
+                <td><?= h($contact->user->username) ?></td>
+                <?php else: ?>
+                <td></td>
+                <?php endif; ?>
+
+                <?php else: ?>
+                <td></td>
+                <?php endif; ?>
+
                 <td><?= h($contact->flagLabel) ?></td>
                 <td class="actions">
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->

@@ -23,11 +23,7 @@ class PostsController extends AppController
 
     public function initialize() {
         parent::initialize();
-        $this->loadModel("Posts");
         $this->loadComponent('Paginator');
-        
-        // default.ctpに現在ログインしているユーザー名を表示するため、ログイン中ユーザーのusernameをセットしている。
-       
     }
 
     // 記事の一覧

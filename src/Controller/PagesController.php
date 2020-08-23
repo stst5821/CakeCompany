@@ -146,7 +146,7 @@ class PagesController extends AppController
             }
             $this->Flash->error(__('登録できませんでした。'));
         }
-        $this->set('user', $contact);
+        $this->set('contact', $contact);
     }
 
 
