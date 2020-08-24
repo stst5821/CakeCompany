@@ -5,15 +5,15 @@
     <table border="1" cellpadding="0" cellspacing="0">
         <thead>
             <tr>
-                <th scope="col"><?= $this->Paginator->sort('id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('customer_name') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('mail') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('body') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('received') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
-                <th scope="col"><?= $this->Paginator->sort('flag') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('id', 'ID') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('customer_name', '顧客氏名') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('mail', 'メールアドレス') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('body', '問合せ内容') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('received', '受信日時') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('modified', '対応完了日時') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('user_id', '対応者名') ?></th>
+                <th scope="col"><?= $this->Paginator->sort('flag', '対応ステータス') ?></th>
+                <th scope="col" class="actions"><?= __('操作') ?></th>
             </tr>
         </thead>
 
@@ -46,14 +46,16 @@
                 <td></td>
                 <?php endif; ?>
 
-                <td><?= h($contact->flagLabel) ?></td>
+                <?php if(($contact->flagLabel) == 'NotYet') : ?>
+                <td>未対応</td>
+                <?php else: ?>
+                <td>対応済</td>
+                <?php endif; ?>
+
                 <td class="actions">
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->
                     <?= $this->Html->link(__('詳細'), ['action' => 'view', $contact->id]) ?>
                     <!-- <?= $this->Html->link(__('修正'), ['action' => 'edit', $contact->id]) ?> -->
-                    <?= $this->Form->postLink(__('削除'), ['action' => 'delete', $contact->id], 
-                    // 削除前の確認ダイアログを追加
-                        ['confirm' => __('# {0} の投稿を削除してよろしいですか？ ', $contact->id)]) ?>
                 </td>
             </tr>
             <?php endforeach; ?>
