@@ -57,4 +57,9 @@
 
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
+    <br>
+    <?= $this->Html->link(('戻る'),
+        ['controller' => 'contacts','action' => 'index']) ?>
+    <br>
 </div>
+<br>

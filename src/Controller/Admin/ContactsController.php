@@ -58,15 +58,44 @@ class ContactsController extends AppController
         if (!IS_SUDO) {
             return $this->redirect(['controller' => 'Posts', 'action' => 'index']);
         }
+
         // contactsテーブルから$idを元に該当するデータを引っ張ってくる
         // containオプションで、Usersテーブルと結合する。
         $contact = $this->Contacts->get($id,[
             'contain' => ['Users']
         ]);
-        // ↑の$userをuser変数に入れてセットして、Viewで使えるようにする。
+        // ↑の$contactをuser変数に入れてセットして、Viewで使えるようにする。
         $this->set('contact', $contact);
 
-        // フォーム入力して送信後
+
+        // フォームに入力して送信後の処理
+
+        // 変更前のflagがdoneだったら実行
+        if($contact['flag'] == CONTENTS__FLAG__DONE)
+        {
+            if ($this->request->is(['patch', 'post', 'put']))
+            {
+            $contact = $this->Contacts->patchEntity($contact, $this->request->getData());
+
+            // 変更後のflagがNOTYETだったら、user_idとmodifiedを削除
+            // 間違ってdoneにしてしまい、user_idとmodifiedが入っても、またNOTYETに変えれば両方とも消せる。
+            if($contact['flag'] == CONTENTS__FLAG__NOT_YET)
+            {
+                $contact['user_id'] = NULL;
+                $contact['modified'] = NULL;
+            }
+
+            if ($this->Contacts->save($contact)) {
+                $this->Flash->success(__('The contact has been saved.'));
+                return $this->redirect(['action' => 'index']);
+            }
+
+            $this->Flash->error(__('The contact could not be saved. Please, try again.'));
+            
+            }
+            
+        $this->set('contact', $contact);
+        }
 
         if ($this->request->is(['patch', 'post', 'put']))
         {
@@ -101,15 +130,17 @@ class ContactsController extends AppController
         $contacts = [];
 
         if ($this->request->is('post')) {
+
             $find = $this->request->data['find'];
             $contacts = $this->paginate($this->Contacts->find()
             // 複数カラムをまたいで検索する場合は、orwhereでメソッドチェーンしていく。
                 ->where(["body like " => '%' . $find . '%'])
                 ->orwhere(["customer_name like " => '%' . $find . '%'])
-                ->orwhere(["mail like " => '%' . $find . '%']));
+                ->orwhere(["mail like " => '%' . $find . '%'])
+            );
+            
             }
             
-        
         $this->set('msg', null);
         $this->set('contacts', $contacts);
     }

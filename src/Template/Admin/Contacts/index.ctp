@@ -22,7 +22,7 @@
 
             <?php foreach ($contacts as $contact): ?>
 
-
+            <!-- trのクラスをflagLabelにすることで、doneのときはbgcolorをグレーにしている。 -->
             <tr class="<?= h($contact->flagLabel) ?>">
                 <td><?= h($contact->id) ?></td>
                 <td><?= h($contact->customer_name) ?></td>

@@ -39,6 +39,9 @@
             <?php endforeach; ?>
         </tbody>
     </table>
+
+    <?php if($this->Paginator->total() > 1): ?>
+
     <div class="paginator">
         <ul class="pagination">
             <?= $this->Paginator->first('<< ' . __('first')) ?>
@@ -51,4 +54,7 @@
             <?= $this->Paginator->counter(['format' => __('Page {{page}} of {{pages}}, showing {{current}} record(s) out of {{count}} total')]) ?>
         </p>
     </div>
+
+    <?php endif ?>
+
 </div>
