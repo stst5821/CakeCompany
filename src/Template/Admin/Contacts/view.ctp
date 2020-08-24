@@ -34,6 +34,7 @@
         </tr>
         <tr>
             <th scope="row"><?= __('対応者氏名') ?></th>
+            <!-- 対応者ID(user_id)が入っている場合、usernameを表示させる。 こうしないとidが入っていない時にエラーになってしまう。-->
             <?php if(isset($contact->user_id)): ?>
             <td><?= h($contact->user->username) ?></td>
             <?php else: ?>

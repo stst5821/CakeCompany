@@ -91,6 +91,10 @@ $cakeDescription = 'Sample Company';
             <!-- お知らせを投稿する。UsersControllerに移動 -->
             <?= $this->Html->link(__('お問い合わせ一覧'), ['controller' => 'Contacts','action' => 'index']) ?>
         </li>
+        <li>
+            <!-- お知らせを投稿する。UsersControllerに移動 -->
+            <?= $this->Html->link(__('お問い合わせ検索'), ['controller' => 'Contacts','action' => 'find']) ?>
+        </li>
     </ul>
 
 </nav>

@@ -79,7 +79,6 @@ class ContactsController extends AppController
                 $contact->setDirty('modified', true);
                 $contact['id'] = '';
             }
-            
 
             if ($this->Contacts->save($contact)) {
                 $this->Flash->success(__('The contact has been saved.'));
@@ -92,4 +91,27 @@ class ContactsController extends AppController
         $this->set('contact', $contact);
     }
 
-}
+    // お問い合わせの詳細
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    
+    public function find() 
+    {
+ 
+        $contacts = [];
+
+        if ($this->request->is('post')) {
+            $find = $this->request->data['find'];
+            $contacts = $this->paginate($this->Contacts->find()
+            // 複数カラムをまたいで検索する場合は、orwhereでメソッドチェーンしていく。
+                ->where(["body like " => '%' . $find . '%'])
+                ->orwhere(["customer_name like " => '%' . $find . '%'])
+                ->orwhere(["mail like " => '%' . $find . '%']));
+            }
+            
+        
+        $this->set('msg', null);
+        $this->set('contacts', $contacts);
+    }
+
+    }
