@@ -132,7 +132,8 @@ class ContactsController extends AppController
 
         $query = $this->Contacts->find();
 
-        if(!empty($this->request->query('find'))) 
+        // flagが空でなければ、flagを検索条件に含めて検索する。
+        if(!empty($this->request->query('flag'))) 
         {
 
         $query->where(['body LIKE' => '%'.$this->request->query('find').'%'])
@@ -141,21 +142,16 @@ class ContactsController extends AppController
         ->where(['flag' => $this->request->query('flag')]);
         }
         
+        // flagが空だったら、flagを検索条件に含めずに検索する。
+        else
+        {
+        $query->where(['body LIKE' => '%'.$this->request->query('find').'%'])
+        ->orwhere(['mail like' => '%'.$this->request->query('find').'%'])
+        ->orwhere(['customer_name like' => '%'.$this->request->query('find').'%']);
+        }
+        
         $contacts = $this->paginate($query);
 
-        // $contacts = [];
-
-        // if ($this->request->is('get')) {
-
-        //     $find = $this->request->data['find'];
-        //     $flag = $this->request->data['flag'];
-
-        //     if(!empty($this->request->query('find')) || !empty($this->request->query('flag'))) {
-        //         $query->where(['mail like' => '%' . $find . '%'])
-        //         ->orwhere(['body like' => '%' . $find . '%'])
-        //         ->orwhere(['customer_name like' => '%' . $find . '%'])
-        //         ->where(['flag' => $flag]);
-        //      }
 
             // if(!$flag == '')
             // {
