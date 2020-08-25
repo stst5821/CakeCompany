@@ -31,17 +31,10 @@
                 <td><?= h($contact->received) ?></td>
                 <td><?= h($contact->modified) ?></td>
 
-                <!-- issetで、usernameがあれば表示、なければ何も表示しない。 -->
-                <?php if(isset($contact->user->username)) : ?>
-
                 <!-- flagをdoneに変更したスタッフ名をuserカラムに入れる。 -->
                 <!-- flagがdoneなら、userカラムにusernameを表示させる。それ以外なら何も表示しない。-->
                 <?php if($contact->flag == CONTENTS__FLAG__DONE) : ?>
                 <td><?= h($contact->user->username) ?></td>
-                <?php else: ?>
-                <td></td>
-                <?php endif; ?>
-
                 <?php else: ?>
                 <td></td>
                 <?php endif; ?>

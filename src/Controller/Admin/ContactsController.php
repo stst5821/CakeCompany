@@ -71,6 +71,7 @@ class ContactsController extends AppController
         // フォームに入力して送信後の処理
 
         // 変更前のflagがdoneだったら実行
+
         if($contact['flag'] == CONTENTS__FLAG__DONE)
         {
             if ($this->request->is(['patch', 'post', 'put']))
@@ -96,6 +97,8 @@ class ContactsController extends AppController
             
         $this->set('contact', $contact);
         }
+
+        // 変更前のflagがNotYetだったら実行
 
         if ($this->request->is(['patch', 'post', 'put']))
         {
@@ -126,23 +129,35 @@ class ContactsController extends AppController
     
     public function find() 
     {
- 
         $contacts = [];
 
         if ($this->request->is('post')) {
 
             $find = $this->request->data['find'];
+            $flag = $this->request->data['flag'];
+
+            if(!$flag == '')
+            {
             $contacts = $this->paginate($this->Contacts->find()
-            // 複数カラムをまたいで検索する場合は、orwhereでメソッドチェーンしていく。
-                ->where(["body like " => '%' . $find . '%'])
-                ->orwhere(["customer_name like " => '%' . $find . '%'])
-                ->orwhere(["mail like " => '%' . $find . '%'])
+            ->where(['mail like' => '%' . $find . '%'])
+            ->orwhere(['body like' => '%' . $find . '%'])
+            ->orwhere(['customer_name like' => '%' . $find . '%'])
+            ->where(['flag' => $flag])
             );
-            
             }
-            
-        $this->set('msg', null);
-        $this->set('contacts', $contacts);
+            else
+            {
+            $contacts = $this->paginate($this->Contacts->find()
+            ->where(['mail like' => '%' . $find . '%'])
+            ->orwhere(['body like' => '%' . $find . '%'])
+            ->orwhere(['customer_name like' => '%' . $find . '%'])
+            );
+            }
+
+        }
+            $this->set('msg', null);
+                $this->set('contacts', $contacts);
+        
     }
 
     }

@@ -3,7 +3,11 @@
     <?= $msg ?>
     <?= $this->Form->create() ?>
     <fieldset>
-        <?= $this->Form->input('find'); ?>
+        <?= $this->Form->input('find',['label' => '検索文字']); ?>
+        <?= $this->Form->control('flag', [
+                'options' => ['' => '',CONTENTS__FLAG__NOT_YET => '未対応', CONTENTS__FLAG__DONE => '対応済'],
+                'label' => '対応ステータス',
+                ]) ?>
         <?= $this->Form->button('Submit') ?>
         <?= $this->Form->end() ?>
     </fieldset>
@@ -19,7 +23,6 @@
                 <th scope="col"><?= $this->Paginator->sort('modified') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('user_id') ?></th>
                 <th scope="col"><?= $this->Paginator->sort('flag') ?></th>
-                <th scope="col" class="actions"><?= __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -33,12 +36,21 @@
                 <td><?= h($contact->body) ?></td>
                 <td><?= h($contact->received) ?></td>
                 <td><?= h($contact->modified) ?></td>
+
+                <!-- 対応ステータスを対応済に変えるまで、usernameは入らないためそのまま表示させるとエラーになる。
+                そのため、if(isset)で値が入っていれば表示するようにしている。 -->
                 <?php if(isset($contact->user->username)) : ?>
                 <td><?= h($contact->user->username) ?></td>
                 <?php else: ?>
                 <td></td>
                 <?php endif; ?>
-                <td><?= h($contact->flagLabel) ?></td>
+
+                <!-- そのままだと対応ステータスに「Done」「NotYet」と表示されてしまうので、if文で未対応と対応済と表示するようにしている。 -->
+                <?php if(($contact->flagLabel) == 'NotYet') : ?>
+                <td>未対応</td>
+                <?php else: ?>
+                <td>対応済</td>
+                <?php endif; ?>
             </tr>
             <?php endforeach; ?>
         </tbody>
