@@ -1,13 +1,13 @@
 <div>
     <h3>お問い合わせ検索</h3>
     <?= $msg ?>
-    <?= $this->Form->create() ?>
+    <?= $this->Form->create(null, ['type' => 'get']) ?>
     <fieldset>
-        <?= $this->Form->input('find',['label' => '検索文字']); ?>
+        <?= $this->Form->input('find',['label' => '検索文字'], ['value' => $this->request->query('find')]); ?>
         <?= $this->Form->control('flag', [
                 'options' => ['' => '',CONTENTS__FLAG__NOT_YET => '未対応', CONTENTS__FLAG__DONE => '対応済'],
                 'label' => '対応ステータス',
-                ]) ?>
+                ], ['value' => $this->request->query('flag')]) ?>
         <?= $this->Form->button('Submit') ?>
         <?= $this->Form->end() ?>
     </fieldset>

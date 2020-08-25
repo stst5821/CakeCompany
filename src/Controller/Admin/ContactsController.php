@@ -16,7 +16,7 @@ use CakeORMTableRegistry;
 class ContactsController extends AppController
 {
     public $paginate = [
-        'limit' => 6,
+        'limit' => 5,
         'order' => ['received' => 'desc'],
         'contain' => ['Users']
     ];
@@ -129,32 +129,53 @@ class ContactsController extends AppController
     
     public function find() 
     {
-        $contacts = [];
 
-        if ($this->request->is('post')) {
+        $query = $this->Contacts->find();
 
-            $find = $this->request->data['find'];
-            $flag = $this->request->data['flag'];
+        if(!empty($this->request->query('find'))) 
+        {
 
-            if(!$flag == '')
-            {
-            $contacts = $this->paginate($this->Contacts->find()
-            ->where(['mail like' => '%' . $find . '%'])
-            ->orwhere(['body like' => '%' . $find . '%'])
-            ->orwhere(['customer_name like' => '%' . $find . '%'])
-            ->where(['flag' => $flag])
-            );
-            }
-            else
-            {
-            $contacts = $this->paginate($this->Contacts->find()
-            ->where(['mail like' => '%' . $find . '%'])
-            ->orwhere(['body like' => '%' . $find . '%'])
-            ->orwhere(['customer_name like' => '%' . $find . '%'])
-            );
-            }
-
+        $query->where(['body LIKE' => '%'.$this->request->query('find').'%'])
+        ->orwhere(['mail like' => '%'.$this->request->query('find').'%'])
+        ->orwhere(['customer_name like' => '%'.$this->request->query('find').'%'])
+        ->where(['flag' => $this->request->query('flag')]);
         }
+        
+        $contacts = $this->paginate($query);
+
+        // $contacts = [];
+
+        // if ($this->request->is('get')) {
+
+        //     $find = $this->request->data['find'];
+        //     $flag = $this->request->data['flag'];
+
+        //     if(!empty($this->request->query('find')) || !empty($this->request->query('flag'))) {
+        //         $query->where(['mail like' => '%' . $find . '%'])
+        //         ->orwhere(['body like' => '%' . $find . '%'])
+        //         ->orwhere(['customer_name like' => '%' . $find . '%'])
+        //         ->where(['flag' => $flag]);
+        //      }
+
+            // if(!$flag == '')
+            // {
+            // $contacts = $this->paginate($this->Contacts->find()
+            // ->where(['mail like' => '%' . $find . '%'])
+            // ->orwhere(['body like' => '%' . $find . '%'])
+            // ->orwhere(['customer_name like' => '%' . $find . '%'])
+            // ->where(['flag' => $flag])
+            // );
+            // }
+            // else
+            // {
+            // $contacts = $this->paginate($this->Contacts->find()
+            // ->where(['mail like' => '%' . $find . '%'])
+            // ->orwhere(['body like' => '%' . $find . '%'])
+            // ->orwhere(['customer_name like' => '%' . $find . '%'])
+            // );
+            // }
+
+        // }
             $this->set('msg', null);
                 $this->set('contacts', $contacts);
         
