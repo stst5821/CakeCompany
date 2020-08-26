@@ -33,17 +33,12 @@
 
                 <!-- flagをdoneに変更したスタッフ名をuserカラムに入れる。 -->
                 <!-- flagがdoneなら、userカラムにusernameを表示させる。それ以外なら何も表示しない。-->
-                <?php if($contact->flag == CONTENTS__FLAG__DONE) : ?>
+                <?php if($contact->flag == CONTACTS__FLAG__DONE) : ?>
                 <td><?= h($contact->user->username) ?></td>
                 <?php else: ?>
                 <td></td>
                 <?php endif; ?>
-
-                <?php if(($contact->flagLabel) == 'NotYet') : ?>
-                <td>未対応</td>
-                <?php else: ?>
-                <td>対応済</td>
-                <?php endif; ?>
+                <td><?= $contact->flagLabelForJapanese ?></td>
 
                 <td class="actions">
                     <!-- $postには、テーブルのレコードがカラムごと入っているので、$post->カラム名というふうに書く。 -->

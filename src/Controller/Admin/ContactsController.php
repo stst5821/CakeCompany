@@ -64,117 +64,63 @@ class ContactsController extends AppController
         $contact = $this->Contacts->get($id,[
             'contain' => ['Users']
         ]);
-        // ↑の$contactをuser変数に入れてセットして、Viewで使えるようにする。
-        $this->set('contact', $contact);
-
-
-        // フォームに入力して送信後の処理
-
-        // 変更前のflagがdoneだったら実行
-
-        if($contact['flag'] == CONTENTS__FLAG__DONE)
-        {
-            if ($this->request->is(['patch', 'post', 'put']))
-            {
-            $contact = $this->Contacts->patchEntity($contact, $this->request->getData());
-
-            // 変更後のflagがNOTYETだったら、user_idとmodifiedを削除
-            // 間違ってdoneにしてしまい、user_idとmodifiedが入っても、またNOTYETに変えれば両方とも消せる。
-            if($contact['flag'] == CONTENTS__FLAG__NOT_YET)
-            {
-                $contact['user_id'] = NULL;
-                $contact['modified'] = NULL;
-            }
-
-            if ($this->Contacts->save($contact)) {
-                $this->Flash->success(__('The contact has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-
-            $this->Flash->error(__('The contact could not be saved. Please, try again.'));
-            
-            }
-            
-        $this->set('contact', $contact);
+ 
+        // 送られてきたデータが、patch,post,putでなければ、実行
+        if (!$this->request->is(['patch', 'post', 'put'])) {
+            $this->set('contact', $contact);
+            return;
         }
 
-        // 変更前のflagがNotYetだったら実行
+        $contact = $this->Contacts->patchEntity($contact, $this->request->getData());
 
-        if ($this->request->is(['patch', 'post', 'put']))
-        {
-            $contact = $this->Contacts->patchEntity($contact, $this->request->getData());
+        // 未対応の場合は対応した管理者IDを空にする
+        if($contact->flag == CONTACTS__FLAG__NOT_YET) {
+            $contact->user_id = NULL;
+        } 
+        //対応済みの場合は対応した管理者のIDを現在のログインしている管理者のIDにする
+        if($contact->flag == CONTACTS__FLAG__DONE) {
+            $contact->user_id = $this->Auth->user('id');
+        } 
 
-            // flagが「NOTYET」だったら、modifiedとidを更新しない。
-            // 理由：doneにした時だけ、対応者IDと氏名を入れたい。doneにした日時をmodifiedに登録したい。
-            if($contact['flag'] == CONTENTS__FLAG__NOT_YET)
-            {
-                $contact->setDirty('modified', true);
-                $contact['id'] = '';
-            }
-
-            if ($this->Contacts->save($contact)) {
-                $this->Flash->success(__('The contact has been saved.'));
-                return $this->redirect(['action' => 'index']);
-            }
-
-            $this->Flash->error(__('The contact could not be saved. Please, try again.'));
-            
+        //エラーの場合は編集ページに戻す
+        if ($contact->getErrors()) {
+            $this->set('contact', $contact);
+            return;
         }
-        $this->set('contact', $contact);
+        // セーブに成功しなかった場合も編集ページに戻す
+        if (!$this->Contacts->save($contact)) {
+            $this->Flash->error(__('例外的なエラーが起こり登録できませんでした。'));
+            return;
+        }
+        $this->Flash->success(__('The contact has been saved.'));
+        
+        return $this->redirect(['controller' => 'Contacts', 'action' => 'index']);
     }
 
-    // お問い合わせの詳細
+    // お問い合わせの検索
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     
     public function find() 
     {
-
-        $query = $this->Contacts->find();
-
-        // flagが空でなければ、flagを検索条件に含めて検索する。
-        if(!empty($this->request->query('flag'))) 
-        {
-
-        $query->where(['body LIKE' => '%'.$this->request->query('find').'%'])
-        ->orwhere(['mail like' => '%'.$this->request->query('find').'%'])
-        ->orwhere(['customer_name like' => '%'.$this->request->query('find').'%'])
-        ->where(['flag' => $this->request->query('flag')]);
-        }
-        
-        // flagが空だったら、flagを検索条件に含めずに検索する。
-        else
-        {
-        $query->where(['body LIKE' => '%'.$this->request->query('find').'%'])
-        ->orwhere(['mail like' => '%'.$this->request->query('find').'%'])
-        ->orwhere(['customer_name like' => '%'.$this->request->query('find').'%']);
-        }
-        
-        $contacts = $this->paginate($query);
-
-
-            // if(!$flag == '')
-            // {
-            // $contacts = $this->paginate($this->Contacts->find()
-            // ->where(['mail like' => '%' . $find . '%'])
-            // ->orwhere(['body like' => '%' . $find . '%'])
-            // ->orwhere(['customer_name like' => '%' . $find . '%'])
-            // ->where(['flag' => $flag])
-            // );
-            // }
-            // else
-            // {
-            // $contacts = $this->paginate($this->Contacts->find()
-            // ->where(['mail like' => '%' . $find . '%'])
-            // ->orwhere(['body like' => '%' . $find . '%'])
-            // ->orwhere(['customer_name like' => '%' . $find . '%'])
-            // );
-            // }
-
-        // }
-            $this->set('msg', null);
-                $this->set('contacts', $contacts);
-        
+        // これの役目がわからない。prで中身見てもデータ型の表記がされているだけ。    
+        $contacts = $this->paginate($this->Contacts->find()->where($this->generateConditions($this->request->query())));
+        $this->set('contacts', $contacts);
     }
 
+    private function generateConditions($query)
+    {
+        $conditions = [];
+        if (isset($query['flag']) && $query['flag'] != null) {
+            $conditions['Contacts.flag'] = $query['flag'];
+        }
+         // フリーワード検索の設定
+        if (isset($query['find']) && $query['find'] != null) {
+            $conditions['OR']['Contacts.body like'] = "%{$query['find']}%";
+            $conditions['OR']['Contacts.mail like'] = "%{$query['find']}%";
+            $conditions['OR']['Contacts.customer_name like'] = "%{$query['find']}%";
+        }
+        return $conditions;
     }
+
+}

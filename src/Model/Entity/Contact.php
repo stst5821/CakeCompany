@@ -7,8 +7,12 @@ use Cake\Auth\DefaultPasswordHasher;
 class Contact extends Entity
 {
     public $flagLabels= [
-        CONTENTS__FLAG__NOT_YET => 'NotYet', // 1
-        CONTENTS__FLAG__DONE => 'Done' // 2
+        CONTACTS__FLAG__NOT_YET => 'NotYet', // 1
+        CONTACTS__FLAG__DONE => 'Done' // 2
+    ];
+    public $flagLabelsForJapanese = [
+        CONTACTS__FLAG__NOT_YET => '未対応', // 1
+        CONTACTS__FLAG__DONE => '対応済' // 2
     ];
     protected $_accessible = [
         '*' => true,
@@ -28,6 +32,10 @@ class Contact extends Entity
     public function _getFlagLabel()
     {
         return isset($this->flagLabels[$this->flag]) ? $this->flagLabels[$this->flag] : '';
+    }
+    public function _getFlagLabelForJapanese()
+    {
+        return isset($this->flagLabelsForJapanese[$this->flag]) ? $this->flagLabelsForJapanese[$this->flag] : '';
     }
 
 }

@@ -44,8 +44,9 @@
         <tr>
             <th scope="row"><?= __('対応ステータス') ?></th>
             <td>
-                <?= $this->Form->control('flag', [
-                'options' => $contact->flagLabels,
+                <?= $this->Form->control('flag', 
+                [
+                'options' => $contact->flagLabelsForJapanese,
                 'label' => '',
                 ]) ?>
             </td>
