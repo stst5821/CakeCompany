@@ -12,9 +12,21 @@
             'label' => '対応ステータス',
             'default' => $this->request->getQuery('flag')
         ]) ?>
-        <?= $this->Form->button('Submit') ?>
+
+        <?= $this->Form->submit(__(' 検索 ',true),array(
+                'name' => 'search',
+            )); ?>
         <?= $this->Form->end() ?>
+
+
     </fieldset>
+
+    <?= $this->Form->create($contacts); ?>
+    <?= $this->Form->hidden('type', ['value' => 'contacts']) ?>
+    <?= $this->Form->submit(__(' CSVダウンロード ',true),array(
+                'name' => 'csv',
+            )); ?>
+    <?= $this->Form->end(); ?>
 
     <table border="1">
         <thead>

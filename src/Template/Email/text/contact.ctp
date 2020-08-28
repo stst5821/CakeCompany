@@ -1,4 +1,5 @@
 お問い合わせを受け付けました。
+
 氏名： <?= h($contact['customer_name']) ?>
 
 メールアドレス：<?= $contact['mail'] ?>

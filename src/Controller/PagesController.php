@@ -91,27 +91,14 @@ class PagesController extends AppController
         // config/app.phpでメール送信の設定をしている。
         $email->setProfile('ToSelf');
 
-        // 会社宛てのお問い合わせがあったことを知らせるメールの内容
-        $body_admin = 'お問い合わせがありました。'
-                ."\n\n".
-                '氏名：'.$contact['customer_name']
-                ."\n".
-                'メールアドレス：'.$contact['mail']
-                ."\n".
-                'お問合せ内容：'.$contact['body']
-                ."\n".
-                '問合せ日時：'.$contact['modified']
-                ."\n\n".
-                '詳細は管理画面から確認してください。'
-                ."\n".
-                'http://localhost/admin';
-
         // 会社宛てに送られるメール
 
         $email->setFrom(['stst5821@gmail.com' => 'SampleCompany'])
         ->setTo('stst5821@gmail.com')
+        ->setTemplate("contact_for_admin")
+        ->viewVars(["contact" => $contact])
         ->setSubject('お問い合わせがありました。')
-        ->send($body_admin);
+        ->send();
 
         // 顧客（問合せした人）に送られるメール
 

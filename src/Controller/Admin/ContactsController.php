@@ -102,10 +102,29 @@ class ContactsController extends AppController
 
     
     public function find() 
-    {
-        // これの役目がわからない。prで中身見てもデータ型の表記がされているだけ。    
+    { 
         $contacts = $this->paginate($this->Contacts->find()->where($this->generateConditions($this->request->query())));
         $this->set('contacts', $contacts);
+
+        if (isset($this->request->data['csv'])) {
+            $_serialize = 'contacts';
+            $_header = ['id', 'customer_name', 'mail','body','received', 'modified','user_id','flag'];
+            // 出力したいカラム名を指定
+            $_extract = [
+                'id',
+                'customer_name',
+                'mail',
+                'body',
+                'received',
+                'modified',
+                'user_id',
+                'flag',
+                ];
+
+            $this->setResponse($this->getResponse()->withDownload('my-file.csv'));
+            $this->viewBuilder()->className('CsvView.Csv');
+            $this->set(compact('contacts', '_serialize', '_header', '_extract'));
+        }
     }
 
     private function generateConditions($query)
@@ -123,4 +142,26 @@ class ContactsController extends AppController
         return $conditions;
     }
 
+    public function export() {
+        $contacts = $this->Contacts->find('all');
+        // クエリを指定する。
+        $_serialize = 'contacts';
+        $_header = ['id', 'customer_name', 'mail','body','received', 'modified','user_id','flag'];
+        // 出力したいカラム名を指定
+        $_extract = [
+            'id',
+            'customer_name',
+            'mail',
+            'body',
+            'received',
+            'modified',
+            'user_id',
+            'flag',
+            ];
+
+        // ダウンロード時のファイル名を指定する。
+        $this->setResponse($this->getResponse()->withDownload('my-file.csv'));
+        $this->viewBuilder()->className('CsvView.Csv');
+        $this->set(compact('contacts', '_serialize', '_header', '_extract'));
+    }
 }
