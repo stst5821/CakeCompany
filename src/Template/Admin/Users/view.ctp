@@ -4,6 +4,10 @@
         <td><?= h($user->username) ?></td>
     </tr>
     <tr>
+        <th scope="row"><?= __('icon') ?></th>
+        <td><img src="\webroot\upload_img\<?= h($user->icon) ?>"></td>
+    </tr>
+    <tr>
         <th scope="row"><?= __('Role') ?></th>
         <td><?= h($user->role) ?></td>
     </tr>

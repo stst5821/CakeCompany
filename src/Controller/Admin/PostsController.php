@@ -50,6 +50,7 @@ class PostsController extends AppController
         // patchEntityにgetDataで取得したデータを入れる。
         $post = $this->Posts->patchEntity($post, $this->request->getData());
 
+        
         if ($post->getErrors()) {
             $this->set('post', $post);
             return;
@@ -58,6 +59,7 @@ class PostsController extends AppController
         if (!$this->Posts->save($post)) {
             $this->Flash->error(__('投稿できませんでした。'));
         }
+
         
         $this->Flash->success(__('投稿しました！'));
         return $this->redirect(['action' => 'index']);

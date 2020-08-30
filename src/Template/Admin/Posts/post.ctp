@@ -1,7 +1,6 @@
     <!-- 最初のフォームタグを生成する。 -->
     <?= $this->Form->create($post, [
-    'type' => 'post',
-    'url' => ['controller' => 'Posts', 'action' => 'post'],
+    'type' => 'post'
   ]); ?>
 
     <fieldset>
