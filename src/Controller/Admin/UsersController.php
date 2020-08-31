@@ -153,37 +153,73 @@ class UsersController extends AppController
             // WWW_ROOTは、フォルダの位置を示す定数
             $dir = realpath(WWW_ROOT . "/upload_img"); //アップロードするファイルを保存するフォルダのパスを指定
             $limitFileSize = 1024 * 1024; // アップロードするファイルの容量の最大値を指定
-            
+
+        // deleteボタンがクリックされたとき
+
+        if(isset($this->request->data["file_delete"])){
             try {
-                // $this->file_uploadで、ファイルアップロード関数を呼び出している。
-                // file_uploadの()の中は引数で、関数に３つの値を渡している。
-                // $file = $this->request->data['icon']
-                // $dir = realpath(WWW_ROOT . "/upload_img"); 89行目あたりで代入している。
-                // $limitFileSize = 1024 * 1024
-                $user['icon'] = $this->Users->file_upload($this->request->data['icon'], $dir, $limitFileSize);          
-            } 
-            catch (RuntimeException $e) {
-                $this->Flash->error(__('ファイルのアップロードができませんでした.'));
+                $del_file = new File($dir . "/". $this->request->data["file_before"]);
+                // ファイル削除処理実行
+                if($del_file->delete()) {
+                    $news['icon'] = "";
+                } else {
+                    $news['icon'] = $this->request->data["file_before"];
+                    throw new RuntimeException('ファイルの削除ができませんでした.');
+                }
+            } catch (RuntimeException $e){
                 $this->Flash->error(__($e->getMessage()));
             }
-            
-            if ($user->getErrors()) {
-                $this->set('user', $user);
-                return;
+        } 
+        else 
+        {
+            // ファイルが入力されたとき
+            if($this->request->data["icon"]["name"]){
+                $limitFileSize = 1024 * 1024;
+                try {
+                    $user['icon'] = $this->Users->file_upload($this->request->data['icon'], $dir, $limitFileSize);
+                    // ファイル更新の場合は古いファイルは削除
+                    if (isset($this->request->data["file_before"])){
+                        // ファイル名が同じ場合は削除を実行しない
+                        if ($this->request->data["file_before"] != $user['icon']){
+                            $del_file = new File($dir . "/". $this->request->data["file_before"]);
+                            if(!$del_file->delete()) {
+                                $this->log("ファイル更新時に下記ファイルが削除できませんでした。",LOG_DEBUG);
+                                $this->log($this->request->data["file_before"],LOG_DEBUG);
+                            }
+                        }
+                    }
+                
+                } catch (RuntimeException $e){
+                    // アップロード失敗の時、既登録ファイルがある場合はそれを保持
+                    if (isset($this->request->data["file_before"])){
+                        $user['icon'] = $this->request->data["file_before"];
+                    }
+                    $this->Flash->error(__('ファイルのアップロードができませんでした.'));
+                    $this->Flash->error(__($e->getMessage()));
+                }
+            } else {
+                // ファイルは入力されていないけど登録されているファイルがあるとき
+                if (isset($this->request->data["file_before"])){
+                    $user['icon'] = $this->request->data["file_before"];
+                }
             }
-            
-            if ($this->Users->save($user)) {
+        }
 
-                $this->Flash->success(__('ユーザーを登録しました。'));
- 
+        if ($this->Users->save($user)) {
+            $this->Flash->success(__('The news has been saved.'));
+
+            if(isset($this->request->data["file_delete"])){
+                $this->set(compact('user'));
+                return $this->redirect(['action' => 'edit', $id]);
+            } else {
                 return $this->redirect(['action' => 'index']);
             }
-            $this->Flash->error(__('登録できませんでした。'));
         }
-        $this->set('user', $user);
-
+        $this->Flash->error(__('The news could not be saved. Please, try again.'));
     }
-
+    $this->set(compact('user'));
+    $this->set('_serialize', ['user']);
+}
 
     // Delete メソッド
     //////////////////////////////////////////////////////////////////////////////////////////////
@@ -198,12 +234,28 @@ class UsersController extends AppController
         // 許可するデータ受け取り方法を決める。
         $this->request->allowMethod(['post', 'delete']);
         $user = $this->Users->get($id);
-        if ($this->Users->delete($user)) {
-            $this->Flash->success(__('削除できました。.'));
-        } else {
-            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+
+        $dir = realpath(WWW_ROOT . "/upload_img");
+        
+        try {
+
+            $del_file = new File($dir . "/". $user->icon);
+            // ファイル削除処理実行
+            if(!$del_file->delete()) {
+                throw new RuntimeException('ファイルの削除ができませんでした.');
+            }
+            $user['icon'] = "";
+
+        } catch (RuntimeException $e){
+            $this->log($e->getMessage(),LOG_DEBUG);
+            $this->log($user->icon,LOG_DEBUG);
         }
- 
+
+        if (!$this->Users->delete($user)) {
+            $this->Flash->error(__('The user could not be deleted. Please, try again.'));
+        } 
+        
+        $this->Flash->success(__('削除できました。.'));
         return $this->redirect(['action' => 'index']);
     }
 
