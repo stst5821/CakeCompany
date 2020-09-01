@@ -5,14 +5,14 @@
     </tr>
     <tr>
         <th scope="row"><?= __('icon') ?></th>
-        <td><img src="\webroot\upload_img\<?= h($user->icon) ?>"></td>
+        <td><img src="<?= $this->File->getIconPass($user->icon) ?>"></td>
     </tr>
     <tr>
         <th scope="row"><?= __('Role') ?></th>
         <td><?= h($user->role) ?></td>
     </tr>
     <tr>
-        <th scope="row"><?= __('Id') ?></th>
+        <th scope=" row"><?= __('Id') ?></th>
         <td><?= $this->Number->format($user->id) ?></td>
     </tr>
     <tr>

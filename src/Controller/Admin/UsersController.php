@@ -131,7 +131,6 @@ class UsersController extends AppController
         }
         $this->set('user', $this->Auth->user('id'));
 
-        // editするため選択したレコードがadminだったら実行する。
         $user = $this->Users->get($id);
         $this->set('user', $user);
 
