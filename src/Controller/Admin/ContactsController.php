@@ -107,6 +107,11 @@ class ContactsController extends AppController
         $this->set('contacts', $contacts);
 
         if (isset($this->request->data['csv'])) {
+            
+            // csvダウンロードが押された時は、ページネーションを外した状態で改めて検索する。
+            // こうしないと、1ページ目しか取得できない。
+            $contacts = $this->Contacts->find()->where($this->generateConditions($this->request->query()));
+            
             $_serialize = 'contacts';
             $_header = ['id', 'customer_name', 'mail','body','received', 'modified','user_id','flag'];
             // 出力したいカラム名を指定

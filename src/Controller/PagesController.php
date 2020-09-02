@@ -96,7 +96,7 @@ class PagesController extends AppController
         $email->setFrom(['stst5821@gmail.com' => 'SampleCompany'])
         ->setTo('stst5821@gmail.com')
         ->setTemplate("contact_for_admin")
-        ->viewVars(["contact" => $contact])
+        ->setviewVars(["contact" => $contact])
         ->setSubject('お問い合わせがありました。')
         ->send();
 

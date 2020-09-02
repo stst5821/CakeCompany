@@ -34,6 +34,7 @@ $cakeDescription = 'Sample Company';
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
     <?= $this->fetch('script') ?>
+    <meta name="google-site-verification" content="PvFjsmBKFP9uTHpZu989Zy3epDJe59sZBSYxVhz-6Y0" />
 </head>
 
 <body id="top">
