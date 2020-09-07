@@ -1,7 +1,5 @@
     <!-- 最初のフォームタグを生成する。 -->
-    <?= $this->Form->create($post, [
-    'type' => 'post'
-  ]); ?>
+    <?= $this->Form->create($post); ?>
 
     <fieldset>
         <legend><?= __('新規投稿') ?></legend>

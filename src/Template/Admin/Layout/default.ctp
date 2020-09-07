@@ -101,6 +101,16 @@ $cakeDescription = 'Sample Company';
         </li>
     </ul>
 
+    <ul class="side-nav">
+        <li>
+            <?= $this->Html->link(__('サービス投稿一覧'), ['controller' => 'Services','action' => 'index']) ?>
+        </li>
+        <li>
+            <!-- お知らせを投稿する。UsersControllerに移動 -->
+            <?= $this->Html->link(__('サービス投稿'), ['controller' => 'Services','action' => 'add']) ?>
+        </li>
+    </ul>
+
 </nav>
 
 

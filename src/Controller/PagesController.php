@@ -12,6 +12,7 @@ namespace App\Controller;
 
 use CakeORMTableRegistry;
 use Cake\Mailer\Email; // Emailクラスをロードする。
+use Cake\ORM\TableRegistry;
 
 
 class PagesController extends AppController
@@ -25,12 +26,13 @@ class PagesController extends AppController
         parent::initialize();
         $this->loadComponent('Paginator');
         // $this->loadHelper('Paginator', ['templates' => 'paginator-templates']);
+        $this->loadModel('Posts');
+        $this->loadModel('Services');
     }
     
     public function index()
     {
         // ページネーションを追加する。
-        $this->loadModel('Posts');
         $pages = $this->paginate($this->Posts);
 
         // USERテーブルを全件検索して、$postsに代入。
@@ -45,6 +47,10 @@ class PagesController extends AppController
 
     public function service()
     {
+        // $this->Services->find('all')で、Servicesの全エンティティを取り出し、setメソッドで'persons'という変数に値を設定している。
+        $services = $this->paginate($this->Services->find('all'));
+
+        $this->set('services', $services);
     }
 
     public function recruit()

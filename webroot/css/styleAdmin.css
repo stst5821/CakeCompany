@@ -20,3 +20,8 @@ li {
 .Done {
     background-color: #dcdcdc;
 }
+
+.buttonDelete {
+    background-color: red;
+    color: #fff;
+}

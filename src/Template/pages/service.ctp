@@ -4,34 +4,29 @@
 
             <h2>SERVICE</h2>
 
-            <div class="list">
-                <?= $this->Html->image('sample1.jpg'); ?>
-                <h4>サービスの見出しを入れます。</h4>
-                <p>説明を入れます。</p>
-            </div>
+            <?php foreach($services as $service): ?>
+            <tr>
+                <div class="list">
+                    <h4><?= h($service->title) ?></h4>
+                    作成日：<?= h($service->created) ?>
+                    更新日：<?= h($service->modified) ?>
+                    <p><?= h($service->body) ?></p>
+                </div>
+            </tr>
+            <?php endforeach; ?>
 
-            <div class="list">
-                <?= $this->Html->image('sample2.jpg'); ?>
-                <h4>ここの見出しの色は、cssフォルダのstyle.cssの「.list h4」で設定されているcolorのコードで変更できます。</h4>
-                <p>左の画像の幅もstyle.cssの「.list img」のwidthの数字で変更できます。</p>
-            </div>
 
-            <div class="list">
-                <?= $this->Html->image('sample3.jpg'); ?>
-                <h4>サービスの見出しを入れます。</h4>
-                <p>説明を入れます。</p>
-            </div>
-
-            <div class="list">
-                <?= $this->Html->image('sample4.jpg'); ?>
-                <h4>サービスの見出しを入れます。</h4>
-                <p>説明を入れます。</p>
-            </div>
-
-            <div class="list">
-                <?= $this->Html->image('sample5.jpg'); ?>
-                <h4>サービスの見出しを入れます。</h4>
-                <p>説明を入れます。</p>
+            <div class="paginator">
+                <ul class="pagination">
+                    <li><?= $this->Paginator->first('<< ' . __('最初のページへ')) ?></li>
+                    <li><?= $this->Paginator->prev('< ' . __('前へ')) ?></li>
+                    <li><?= $this->Paginator->numbers() ?></li>
+                    <li><?= $this->Paginator->next(__('次へ') . ' >') ?></li>
+                    <li><?= $this->Paginator->last(__('最後へ') . ' >>') ?></li>
+                </ul>
+                <p>
+                    <?= $this->Paginator->counter(['format' => __(' {{page}} ページ目(全 {{pages}}ページ)')]) ?>
+                </p>
             </div>
 
         </section>

@@ -26,7 +26,9 @@ class PostsController extends AppController
         $this->loadComponent('Paginator');
     }
 
-    // 記事の一覧
+    // index
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     public function index()
     {
         // ページネーションを追加する。
@@ -34,7 +36,8 @@ class PostsController extends AppController
         $this->set('posts', $posts);
     }
 
-    // 記事の投稿
+    // post
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function post($id = null)
     {
@@ -65,7 +68,8 @@ class PostsController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    // viewメソッド
+    // view
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function view($id = null)
     {
@@ -88,7 +92,8 @@ class PostsController extends AppController
         $this->set('post', $post);
     }
 
-    // editメソッド
+    // edit
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     public function edit($id = null)
     {
@@ -141,13 +146,16 @@ class PostsController extends AppController
         //     return $this->redirect(['action' => 'index']);
         // }
         
-        // getとdeleteのリクエストのみ受付。postだとエラーを出す。
-        $this->request->allowMethod(['post', 'delete']);
+        // getリクエストのみ受付。postだとエラーを出す。
+        $this->request->allowMethod(['post']);
+
         if (empty($id)) {
             $this->redirect(['action' => 'index']);
             return;
         }
+
         $post = $this->Posts->find()->where(["Posts.id" => $id])->first();
+        
         if (empty($post)) {
             $this->redirect(['action' => 'index']);
             return;
